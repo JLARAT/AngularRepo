@@ -1,0 +1,12 @@
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+#LatLngContainer{
+    width : 400px;
+}
+
+
+.angular-google-map-container {
+    width : 600px;
+    height:  400px;
+    margin-left: 10%;
+}
