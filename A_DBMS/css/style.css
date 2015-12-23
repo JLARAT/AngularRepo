@@ -11,7 +11,7 @@ body{
 
 }
 
-#ContainerDB{
+#ContainerDB, #ContainerTable{
     border:3px solid black;
 }
 
