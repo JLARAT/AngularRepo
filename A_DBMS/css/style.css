@@ -1,0 +1,28 @@
+body{
+    background-image: url('../ressources/wall.jpg');
+    background-repeat: no-repeat;
+}
+
+#abdmsTitle{
+    font-family: Blippo;
+}
+#DivDB{
+    padding-top:100px;
+
+}
+
+#ContainerDB{
+    border:3px solid black;
+}
+
+label{
+    font-size: 15px;
+    color: #000000;
+}
+
+.col.s12.m6{
+    float: none;
+    margin: 100px auto;
+    width: 600px;
+    height: 300px;
+}
