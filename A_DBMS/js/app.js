@@ -2,8 +2,8 @@
  * Created by JOCLAR on 10/12/2015.
  */
 'use strict'
-var app = angular.module('myApp',['ngRoute','routeAppControllers']);
-var routeAppControllers = angular.module('routeAppControllers', []);
+var app = angular.module('myApp',['ngRoute']);
+
 
 app.config(['$routeProvider',
     function($routeProvider) {
@@ -13,13 +13,18 @@ app.config(['$routeProvider',
             .when('/bdd', {
                 templateUrl: 'partials/section-bdd.html',
                 controller: 'sectionBddController'
+
             })
             .when('/table', {
                 templateUrl: 'partials/section-table.html',
                 controller: 'sectionTableController'
             })
+            .when('/index', {
+                templateUrl: 'partials/section-parallax.html',
+                controller: 'sectionParallaxController'
+            })
             .otherwise({
-            redirectTo: '/bdd'
+            redirectTo: '/index'
             });
     }
 ]);

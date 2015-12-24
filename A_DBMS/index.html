@@ -30,34 +30,14 @@
     </div>
 </nav>
 
-<!-- Parallax -->
-<div id="ParallaxContainer" ng-show="DisplayParallax == false" ng-controller="parallaxController">
-    <div class="parallax-container" style="height:600px;">
-        <div class="parallax"><img src="ressources/parallax.jpg"></div>
-    </div>
-    <div class="section black" style="height:400px;">
-        <div class="row container">
-            <h2 class="header white-text">DateBase Management System</h2>
 
-            <p class="white-text text-darken-3 lighten-3">Try the most powerful tool to create your own database.</p>
-
-            <p class="white-text text-darken-3 lighten-3">Select your favorite DataBase; Create & Update all your tables
-                and explore all you can do.</p>
-            </br>
-            <a class="waves-effect waves-light btn-large" ng-click="Launcher()">Let's Go</a>
-        </div>
-    </div>
-    <div class="parallax-container" style="height:1500px;">
-        <div class="parallax"><img src="ressources/end.jpg"></div>
-    </div>
-</div>
 
 <!-- BDD
 <section-bdd></section-bdd>
 
-<!--Tables
-<section-table></section-table>
--->
+<!--Tables-->
+<section-list-tables></section-list-tables>
+
 <div ng-view></div>
 
 <!--Script-->

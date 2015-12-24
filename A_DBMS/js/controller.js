@@ -4,7 +4,7 @@
 
 //MainController
 app.controller('mainController', function ($scope){
-
+    $scope.tables = [];
     //Init variable
     $scope.DisplayParallax = true;
 
@@ -13,28 +13,52 @@ app.controller('mainController', function ($scope){
 });
 
 //Parallax controller
-app.controller('parallaxController', function ($scope){
+app.controller('sectionParallaxController', function ($scope, $location){
 
     $scope.Launcher = function(){
-        $scope.DisplayParallax = false;
+        Materialize.toast("Enjoy !", 2000);
+        $("#ParallaxContainer").addClass('animated bounceOut').delay(500).queue(function(next){
+            next();
+        });
+        $location.path('/bdd');
+
     };
 });
 
 
 //Section Controllers
- routeAppControllers.controller('sectionBddController', function($scope){
+ app.controller('sectionBddController', function($scope, $location){
     $scope.DbModel = "";
 
     $scope.NextStep = function(){
         Materialize.toast($scope.DbModel, 2000);
-        $('#ContainerDBSelect').addClass('animated zoomOutDown');
-
-        document.location.href="#/table";
-
+        $("#ContainerDBSelect").addClass('animated zoomOutDown').delay(500).queue(function(next){
+            next();
+        });
+        $location.path('/table');
     }
 
 });
 
- routeAppControllers.controller('sectionTableController', function($scope){
-     $('#ContainerTableSelect').addClass('animated zoomInUp');
+ app.controller('sectionTableController', function($scope){
+     $scope.addTable = function(){
+         var newTable = $scope.newTable.trim();
+         if (!newTable.length) {
+             // avoid void table
+             return;
+         }
+         $scope.tables.push({
+             title: newTable
+         });
+
+         $scope.newTable = "";
+     };
+});
+
+
+app.controller('sectionListTables', function($scope){
+
+    $scope.removeTable = function (table) {
+        $scope.tables.splice($scope.tables.indexOf(table), 1);
+    };
 });

@@ -1,18 +1,11 @@
 /**
  * Created by JOCLAR on 11/12/2015.
  */
-app.directive('sectionBdd', function(){
+app.directive('sectionListTables', function(){
     return {
         restrict: 'E',
-        controller: 'sectionBddController',
-        templateUrl: 'partials/section-bdd.html'
+        controller: 'sectionListTables',
+        templateUrl: 'partials/section-listTables.html'
     };
 });
 
-app.directive('sectionTable', function(){
-    return {
-        restrict: 'E',
-        controller: 'sectionTableController',
-        templateUrl: 'partials/section-table.html'
-    };
-});
