@@ -23,6 +23,10 @@ app.config(['$routeProvider',
                 templateUrl: 'partials/section-parallax.html',
                 controller: 'sectionParallaxController'
             })
+            .when('/edit', {
+                templateUrl: 'partials/section-editTable.html',
+                controller: 'sectionEditTablesController'
+            })
             .otherwise({
             redirectTo: '/index'
             });
