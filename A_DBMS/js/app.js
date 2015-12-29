@@ -23,7 +23,7 @@ app.config(['$routeProvider',
                 templateUrl: 'partials/section-parallax.html',
                 controller: 'sectionParallaxController'
             })
-            .when('/edit', {
+            .when('/edit/:nomTable', {
                 templateUrl: 'partials/section-editTable.html',
                 controller: 'sectionEditTablesController'
             })

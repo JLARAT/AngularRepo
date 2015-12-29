@@ -5,35 +5,59 @@
 //MainController
 app.controller('mainController', function ($scope) {
     $scope.tables = [];
-    $scope.columns = [{
-        title: "testTitle",
-        type: "int"
-    }, {
-        title: "test2",
-        type: "int"
-    }];
-
-    $scope.filterCondition={
-        operator: '2'
-    }
-
-    $scope.types = [{
-        id:"1",
-        title:"int"
-    },
+    $scope.table = {
+        name: "",
+        columns: []
+    };
+    $scope.columns = [
         {
-           id:"2",
-            title:"varchar"
+            idDel : 1,
+            idPk : 100,
+            title: "testTitle",
+            type: "int",
+            pk: false,
+            del:false
         },
         {
-            id:"3",
-            title:"bool"
+            idDel: 2,
+            idPk: 200,
+            title: "test2",
+            type: "varchar",
+            pk: true,
+            del:false
+        },
+        {
+            idDel: 3,
+            idPk: 300,
+            title: "test3",
+            type: "int",
+            pk: false,
+            del:false
         }];
 
+
+    $scope.types = [
+        {
+            id: "1",
+            type: "int"
+        },
+        {
+            id: "2",
+            type: "varchar"
+        },
+        {
+            id: "3",
+            type: "bool"
+        },
+        {
+            id: "4",
+            type: "date"
+        }];
 
 
     //Init variable
     $scope.DisplayParallax = true;
+    $scope.tableName = "";
 
 
 });
@@ -106,20 +130,67 @@ app.controller('sectionListTables', function ($scope, $location) {
     };
 });
 
-app.controller('sectionEditTablesController', function ($scope) {
+app.controller('sectionEditTablesController', function ($scope, $location, $routeParams) {
 
     $('select').material_select();
 
-    $scope.addColumn = function (column) {
-        $scope.columns.push(column);
-        $scope.columns = {};
+    //récupération du nom de la table passée en url
+    $scope.tableName = $routeParams.nomTable;
+
+    $scope.addColumn = function () {
+        if (!$scope.column.title) {
+            // avoid void column
+            Materialize.toast("Column Name is void !", 2000);
+            return;
+        }
+        else if (!$scope.column.type) {
+            // avoid void column
+            Materialize.toast("Column type is void !", 2000);
+            return;
+        }
+        Materialize.toast("Adding Column...", 2000);
+
+        $scope.columns.push({
+            idDel: Object.keys($scope.columns).length+1,
+            idPk: (Object.keys($scope.columns).length+1)*100,
+            title: $scope.column.title,
+            type: $scope.column.type,
+            pk: false
+        });
+        $scope.column = {};
     };
 
     $scope.keypressHandler = function ($event) {
         if ($event.keyCode == 13) {
-            Materialize.toast("Adding Column...", 2000);
             $scope.addColumn();
         }
+    };
+
+    $scope.clearColumns = function () {
+        $scope.columns  = $scope.columns.filter(function (column) {
+            return !column.del;
+        });
+    };
+
+    $scope.checkPk = function(id){
+        Materialize.toast("Changing Primary Key", 2000);
+        for (var c in $scope.columns){
+            if($scope.columns[c].idPk != id){$scope.columns[c].pk = false;}
+        }
+    };
+
+    $scope.returnToListTables = function(){
+        $location.path('/table');
+    };
+
+    $scope.saveTable = function(){
+        Materialize.toast("Saving Table...", 2000);
+
+        $scope.table = {
+            name: $scope.tableName,
+            columns: $scope.columns
+        };
+            console.log($scope.table);
     };
 
 });

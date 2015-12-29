@@ -1,7 +1,7 @@
 <div class="container animated fadeInRight" id="ContainerEditTables">
     <div class="col s12 m6">
         <div id="ContainerEditTable" class="card-panel white">
-            <h5 id="h5Eta">Edit your Tables</h5>
+            <h5 id="h5Eta">Edit your Table : {{tableName}}</h5>
             <table class="highlight">
                 <form id="table-form" ng-submit="editTable()">
                     <thead>
@@ -12,30 +12,30 @@
                         <th data-field="typr">Type</th>
                     </tr>
                     </thead>
-
                     <tbody>
-                    <tr ng-repeat="column in columns">
+                    <tr ng-repeat="c in columns">
                         <td>
-                            <input type="checkbox" id="checkDel0"/>
-                            <label for="checkDel0"></label>
+                            <input id="{{c.idDel}}" type="checkbox" ng-model="c.del"/>
+                            <label for="{{c.idDel}}"></label>
                         </td>
                         <td>
-                            <input type="checkbox" id="checkPk0"/>
-                            <label for="checkPk0"></label>
+                            <input id="{{c.idPk}}" type="checkbox" ng-model="c.pk" ng-click="checkPk(c.idPk)" watch/>
+                            <label for="{{c.idPk}}"></label>
                         </td>
                         <td>
                             <div class="input-field">
-                                <input id="columnName0" type="text" ng-model="column.title" required/>
+                                <input id="columnName0" type="text" ng-model="c.title" required/>
                             </div>
                         </td>
                         <td>
                             <div>
-                                <select class="browser-default" ng-model="type.title" ng-init="type = types[1]" material-select watch >
-                                    <option ng-repeat="type in types" ng-selected="type.id == '1'">{{type.title}}</option>
+                                <select class="browser-default" ng-model="c.type" material-select watch>
+                                    <option ng-repeat="t in types">{{t.type}}</option>
                                 </select>
                             </div>
                         </td>
                     </tr>
+
                     <tr>
                         <td>
                             <input type="checkbox" id="checkDel"/>
@@ -46,40 +46,35 @@
                             <label for="checkPk"></label>
                         </td>
                         <td>
-                            <div class="input-field">
+                            <div class="input-field col s12">
                                 <input id="columnName" type="text" ng-model="column.title"
                                        ng-keypress="keypressHandler($event)"
                                        required/>
-                                <label for="columnName">Add your column</label>
+                                <label for="columnName">Column Name</label>
                             </div>
                         </td>
                         <td>
                             <div class="input-field col s12">
-                                <select ng-model="column.type" select={{column.type}}>
-                                    <option value="varchar5">Varchar(50)</option>
-                                    <option value="varchar500">Varchar(500)</option>
-                                    <option value="int">Int</option>
-                                    <option value="float">Float</option>
-                                    <option value="date">Date</option>
-                                    <option value="boolean">Boolean</option>
+                                <select class="browser-default" ng-model="column.type" material-select watch>
+                                    <option ng-repeat="t in types">{{t.type}}</option>
                                 </select>
-                                <label>Column Type</label>
                             </div>
                         </td>
                     </tr>
                     </tbody>
                 </form>
             </table>
+            <a class="btn-floating btn waves-effect waves-light black" ng-click="clearColumns()"><i
+                    class="mdi-content-clear">dell</i></a>
+            <a class="btn-floating btn waves-effect waves-light black" ng-click="addColumn()"><i class="material-icons">add</i></a>
 
-            <a class="btn-floating btn waves-effect waves-light black"><i class="mdi-content-clear">dell</i></a>
-            <a class="btn-floating btn waves-effect waves-light black" ng-click="addColumn(column)"><i class="material-icons">add</i></a>
-            <!--
             </br>
             </br>
-            <a class="waves-effect waves-light btn">Return</a>
-            <a class="waves-effect waves-light btn">Delete Table</a>
-            <a class="waves-effect waves-light btn">Save Table</a>
-            -->
+            <hr>
+            <div align="right">
+                <a class="waves-effect waves-light black btn" ng-click="returnToListTables()">Return</a>
+                <a class="waves-effect waves-light black btn" ng-click="saveTable()">Save</a>
+            </div>
         </div>
     </div>
 
