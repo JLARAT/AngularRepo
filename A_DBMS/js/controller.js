@@ -190,7 +190,12 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
             name: $scope.tableName,
             columns: $scope.columns
         };
-            console.log($scope.table);
+
+        localStorage.setItem($scope.tableName, JSON.stringify($scope.table));
+
+        //console.log($scope.tableName, JSON.parse(localStorage.getItem($scope.tableName)));
+
+        $scope.table = {};
     };
 
 });
