@@ -3,7 +3,7 @@
  */
 
 //MainController
-app.controller('mainController', function ($scope) {
+app.controller('mainController', function ($scope, localStorageDataProvider) {
     $scope.tables = [];
     $scope.table = {
         name: "",
@@ -59,6 +59,7 @@ app.controller('mainController', function ($scope) {
     $scope.DisplayParallax = true;
     $scope.tableName = "";
 
+    localStorageDataProvider.getLocalStorageTables();
 
 });
 
@@ -126,7 +127,7 @@ app.controller('sectionListTables', function ($scope, $location) {
         $("#ContainerTableSelect").addClass('animated fadeOutLeft').delay(1000).queue(function (next) {
             next();
         });
-        $location.path('/edit');
+        $location.path('/edit/'+table.title);
     };
 });
 
@@ -193,7 +194,7 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
 
         localStorage.setItem($scope.tableName, JSON.stringify($scope.table));
 
-        //console.log($scope.tableName, JSON.parse(localStorage.getItem($scope.tableName)));
+        console.log($scope.tableName, JSON.parse(localStorage.getItem($scope.tableName)));
 
         $scope.table = {};
     };
