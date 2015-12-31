@@ -104,55 +104,49 @@ app.controller('sectionTableController', function ($scope) {
 });
 
 //Directive
-app.controller('sectionListTables', function ($scope, $location) {
+app.controller('sectionListTables', function ($scope, $location, localStorageDataProvider) {
 
     $scope.removeTable = function (table) {
-        console.log(table.title);
-        localStorage.removeItem(table.title);
+        localStorageDataProvider.removeTable(table.title);
         $scope.tables.splice($scope.tables.indexOf(table), 1);
-
-        /*
-        for(var i=0; i<localStorage.length;  i++) {
-            var name = localStorage.key(i);
-            var columns = localStorage[name];
-            console.log(name + " => " + columns);
-        }
-*/
-        //localStorage.clear();
     };
-
 
     $scope.editTable = function (table) {
         $("#ContainerTableSelect").addClass('animated fadeOutLeft').delay(1000).queue(function (next) {
             next();
         });
-
-
-
         $location.path('/edit/'+table.title);
     };
+
+    $scope.clearAllTables = function(){
+        if (confirm("Sure to delete all tables ?")) {
+            localStorageDataProvider.removeAllTables();
+                $scope.tables = [];
+                $location.path('/table');
+            }
+
+    }
+
 });
 
-app.controller('sectionEditTablesController', function ($scope, $location, $routeParams) {
+app.controller('sectionEditTablesController', function ($scope, $location, $routeParams, localStorageDataProvider) {
 
-    $('select').material_select();
-
+    var tableRecup = {};
 
     //récupération du nom de la table passée en url
     $scope.tableName = $routeParams.nomTable;
 
+    tableRecup = localStorageDataProvider.getTable($scope.tableName);
+    console.log("tableRecup : "+tableRecup.name);
+    console.log("ls : "+JSON.parse(localStorage.getItem($scope.tableName)));
 
-    if(localStorage.getItem($scope.tableName) == null) {
+
+    if(tableRecup.name === undefined) {
         $scope.columns = [];
         $scope.column = {};
-        //console.log("1er : "+localStorage.getItem($scope.tableName));
     }
     else{
-        //console.log("2e : "+localStorage.getItem($scope.tableName));
-        //console.log("JsonPars : "+JSON.parse(localStorage.getItem($scope.tableName)));
-        //console.log("table : "+$scope.table.name+" columns : "+$scope.table.columns);
-       
-        $scope.table = JSON.parse(localStorage.getItem($scope.tableName));
+        $scope.table = tableRecup;
         $scope.columns = $scope.table.columns;
 
     }

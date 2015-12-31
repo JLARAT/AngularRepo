@@ -24,7 +24,7 @@
         </ul>
         <a href="#/index" class="brand-logo center black" id="abdmsTitle">Angular DBMS</a>
         <ul id="nav-mobileRight" class="right hide-on-med-and-down">
-            <li><a href="#/table" class="waves-effect waves-light btn modal-trigger white black-text" ng-click="clearAllData()">Clear</a>
+            <li><a href="#/table" class="waves-effect waves-light btn modal-trigger white black-text">Settings</a>
             </li>
         </ul>
     </div>
@@ -50,9 +50,11 @@
 <script src="js/directives.js"></script>
 <script src="js/services.js"></script>
 <script src="js/angular-route.js"></script>
+<script src="js/angular-confirm.js"></script>
 <script>
     $(document).ready(function () {
         $('.parallax').parallax();
+        $('select').material_select();
     });
 
 </script>

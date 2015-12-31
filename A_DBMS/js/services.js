@@ -13,10 +13,30 @@ app.factory('localStorageDataProvider', function () {
             for(var i=0; i<localStorage.length;  i++) {
                 var name = localStorage.key(i);
                 var columns = localStorage[name];
-                console.log(name + " => " + columns);
+                lsTable.name = name;
+                lsTable.colums = columns;
+                lsTables.push(lsTable);
             }
 
             return 0;
+        },
+
+        getTable: function(tableNom){
+            var table= {};
+
+            if(localStorage.getItem(tableNom) != null) {
+                table = JSON.parse(localStorage.getItem(tableNom));
+            }
+            return table;
+        },
+
+        removeAllTables: function(){
+            localStorage.clear();
+        },
+
+        removeTable: function (tableNom){
+            localStorage.removeItem(tableNom);
+
         }
 
 
