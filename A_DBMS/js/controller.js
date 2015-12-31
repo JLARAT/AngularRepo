@@ -3,38 +3,22 @@
  */
 
 //MainController
-app.controller('mainController', function ($scope, localStorageDataProvider) {
+app.controller('mainController', function ($scope, $location, localStorageDataProvider) {
     $scope.tables = [];
     $scope.table = {
         name: "",
         columns: []
     };
-    $scope.columns = [
-        {
-            idDel : 1,
-            idPk : 100,
-            title: "testTitle",
-            type: "int",
-            pk: false,
-            del:false
-        },
-        {
-            idDel: 2,
-            idPk: 200,
-            title: "test2",
-            type: "varchar",
-            pk: true,
-            del:false
-        },
-        {
-            idDel: 3,
-            idPk: 300,
-            title: "test3",
-            type: "int",
-            pk: false,
-            del:false
-        }];
+    $scope.columns = [];
 
+    $scope.column = {
+        idDel : 0,
+        idPk : 0,
+        title: "",
+        type: "",
+        pk: false,
+        del:false
+    };
 
     $scope.types = [
         {
@@ -59,8 +43,12 @@ app.controller('mainController', function ($scope, localStorageDataProvider) {
     $scope.DisplayParallax = true;
     $scope.tableName = "";
 
-    localStorageDataProvider.getLocalStorageTables();
+    //localStorageDataProvider.getLocalStorageTables();
 
+    $scope.clearAllData = function(){
+        localStorage.clear();
+        $location.path('/table');
+    }
 });
 
 //Parallax controller
@@ -119,7 +107,18 @@ app.controller('sectionTableController', function ($scope) {
 app.controller('sectionListTables', function ($scope, $location) {
 
     $scope.removeTable = function (table) {
+        console.log(table.title);
+        localStorage.removeItem(table.title);
         $scope.tables.splice($scope.tables.indexOf(table), 1);
+
+        /*
+        for(var i=0; i<localStorage.length;  i++) {
+            var name = localStorage.key(i);
+            var columns = localStorage[name];
+            console.log(name + " => " + columns);
+        }
+*/
+        //localStorage.clear();
     };
 
 
@@ -127,6 +126,9 @@ app.controller('sectionListTables', function ($scope, $location) {
         $("#ContainerTableSelect").addClass('animated fadeOutLeft').delay(1000).queue(function (next) {
             next();
         });
+
+
+
         $location.path('/edit/'+table.title);
     };
 });
@@ -135,8 +137,25 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
 
     $('select').material_select();
 
+
     //récupération du nom de la table passée en url
     $scope.tableName = $routeParams.nomTable;
+
+
+    if(localStorage.getItem($scope.tableName) == null) {
+        $scope.columns = [];
+        $scope.column = {};
+        //console.log("1er : "+localStorage.getItem($scope.tableName));
+    }
+    else{
+        //console.log("2e : "+localStorage.getItem($scope.tableName));
+        //console.log("JsonPars : "+JSON.parse(localStorage.getItem($scope.tableName)));
+        //console.log("table : "+$scope.table.name+" columns : "+$scope.table.columns);
+       
+        $scope.table = JSON.parse(localStorage.getItem($scope.tableName));
+        $scope.columns = $scope.table.columns;
+
+    }
 
     $scope.addColumn = function () {
         if (!$scope.column.title) {
@@ -194,7 +213,7 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
 
         localStorage.setItem($scope.tableName, JSON.stringify($scope.table));
 
-        console.log($scope.tableName, JSON.parse(localStorage.getItem($scope.tableName)));
+        //console.log($scope.tableName, JSON.parse(localStorage.getItem($scope.tableName)));
 
         $scope.table = {};
     };
