@@ -7,17 +7,16 @@ app.controller('mainController', function ($scope, $location, localStorageDataPr
     $scope.tables = [];
     $scope.table = {
         name: "",
-        columns: []
+        columns: [],
+        pkIsDefined: false
     };
     $scope.columns = [];
 
     $scope.column = {
-        idDel : 0,
-        idPk : 0,
+        idC: 0,
         title: "",
         type: "",
-        pk: false,
-        del:false
+        pk: false
     };
 
     $scope.types = [
@@ -38,6 +37,7 @@ app.controller('mainController', function ($scope, $location, localStorageDataPr
             type: "date"
         }];
 
+    $scope.tablePK = [];
 
     //Init variable
     $scope.DisplayParallax = true;
@@ -45,7 +45,7 @@ app.controller('mainController', function ($scope, $location, localStorageDataPr
 
     //localStorageDataProvider.getLocalStorageTables();
 
-    $scope.clearAllData = function(){
+    $scope.clearAllData = function () {
         localStorage.clear();
         $location.path('/table');
     }
@@ -56,7 +56,7 @@ app.controller('sectionParallaxController', function ($scope, $location) {
 
     $scope.Launcher = function () {
         Materialize.toast("Enjoy !", 2000);
-        $("#ParallaxContainer").addClass('animated bounceOut').delay(1000).queue(function (next) {
+        $("#ParallaxContainer").addClass('animated bounceOut').delay(2000).queue(function (next) {
             next();
         });
         $location.path('/bdd');
@@ -112,18 +112,18 @@ app.controller('sectionListTables', function ($scope, $location, localStorageDat
     };
 
     $scope.editTable = function (table) {
-        $("#ContainerTableSelect").addClass('animated fadeOutLeft').delay(1000).queue(function (next) {
+        $("#ContainerTableSelect").addClass('animated fadeOutLeft').delay(2000).queue(function (next) {
             next();
         });
-        $location.path('/edit/'+table.title);
+        $location.path('/edit/' + table.title);
     };
 
-    $scope.clearAllTables = function(){
+    $scope.clearAllTables = function () {
         if (confirm("Sure to delete all tables ?")) {
             localStorageDataProvider.removeAllTables();
-                $scope.tables = [];
-                $location.path('/table');
-            }
+            $scope.tables = [];
+            $location.path('/table');
+        }
 
     }
 
@@ -137,36 +137,43 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
     $scope.tableName = $routeParams.nomTable;
 
     tableRecup = localStorageDataProvider.getTable($scope.tableName);
-    console.log("tableRecup : "+tableRecup.name);
-    console.log("ls : "+JSON.parse(localStorage.getItem($scope.tableName)));
 
-
-    if(tableRecup.name === undefined) {
+    //récupération des tables existantes
+    if (tableRecup.name === undefined) {
         $scope.columns = [];
         $scope.column = {};
     }
-    else{
+    else {
         $scope.table = tableRecup;
         $scope.columns = $scope.table.columns;
 
     }
 
+
+    for (t in $scope.tables) {
+        for (c in t.columns) {
+            if (c.pk){
+                $scope.tablePK.push(c);
+            }
+        }
+    }
+
+
     $scope.addColumn = function () {
         if (!$scope.column.title) {
-            // avoid void column
+            // avoid void name column
             Materialize.toast("Column Name is void !", 2000);
             return;
         }
         else if (!$scope.column.type) {
-            // avoid void column
+            // avoid void type column
             Materialize.toast("Column type is void !", 2000);
             return;
         }
         Materialize.toast("Adding Column...", 2000);
 
         $scope.columns.push({
-            idDel: Object.keys($scope.columns).length+1,
-            idPk: (Object.keys($scope.columns).length+1)*100,
+            idC: Object.keys($scope.columns).length,
             title: $scope.column.title,
             type: $scope.column.type,
             pk: false
@@ -180,36 +187,40 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
         }
     };
 
-    $scope.clearColumns = function () {
-        $scope.columns  = $scope.columns.filter(function (column) {
-            return !column.del;
-        });
+    $scope.delColumn = function (col) {
+        $scope.columns.splice($scope.columns.indexOf(col), 1);
     };
 
-    $scope.checkPk = function(id){
-        Materialize.toast("Changing Primary Key", 2000);
-        for (var c in $scope.columns){
-            if($scope.columns[c].idPk != id){$scope.columns[c].pk = false;}
+    $scope.checkPk = function (col) {
+
+        //permet d'identifier la pk, si c'est la même que la colonne selectionnée
+        $scope.table.pkIsDefined = $scope.columns[col].pk;
+
+        //reproduit le comportement d'un radio
+        for (var c in $scope.columns) {
+            if ($scope.columns[c].idC != col) {
+                $scope.columns[c].pk = false;
+            }
         }
     };
 
-    $scope.returnToListTables = function(){
-        $location.path('/table');
-    };
-
-    $scope.saveTable = function(){
+    //save and return
+    $scope.returnToListTables = function () {
+        if (!$scope.table.pkIsDefined) {
+            Materialize.toast("Primary key is not defined", 2000);
+            return;
+        }
         Materialize.toast("Saving Table...", 2000);
 
-        $scope.table = {
-            name: $scope.tableName,
-            columns: $scope.columns
-        };
+        $scope.table.name = $scope.tableName;
+        $scope.table.columns = $scope.columns;
 
         localStorage.setItem($scope.tableName, JSON.stringify($scope.table));
 
-        //console.log($scope.tableName, JSON.parse(localStorage.getItem($scope.tableName)));
 
         $scope.table = {};
+        $location.path('/table');
     };
+
 
 });

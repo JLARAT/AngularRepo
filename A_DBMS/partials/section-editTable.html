@@ -10,18 +10,20 @@
                         <th data-field="pk">PK</th>
                         <th data-field="name">Column Name</th>
                         <th data-field="typr">Type</th>
+                        <th data-field="fk">FK</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="c in columns">
                         <td>
-                            <input id="{{c.idDel}}" type="checkbox" ng-model="c.del"/>
-                            <label for="{{c.idDel}}"></label>
+                            <a ng-click="delColumn(c)" style="cursor: pointer;">X</a>
                         </td>
                         <td>
-                            <input id="{{c.idPk}}" type="checkbox" ng-model="c.pk" ng-click="checkPk(c.idPk)" watch/>
-                            <label for="{{c.idPk}}"></label>
+                            <input id="{{c.idC}}" type="checkbox" ng-model="c.pk" ng-click="checkPk(c.idC)" watch/>
+
+                            <label for="{{c.idC}}"><i class="material-icons" ng-show="c.pk">vpn_key</i></label>
                         </td>
+
                         <td>
                             <div class="input-field">
                                 <input id="columnName0" type="text" ng-model="c.title" required/>
@@ -34,11 +36,19 @@
                                 </select>
                             </div>
                         </td>
+                        <td>
+                            <div>
+                                <select class="browser-default" material-select watch>
+                                    <option ng-repeat="c in tablePK">{{c.title}}</option>
+                                </select>
+                            </div>
+                        </td>
                     </tr>
 
                     <tr>
                         <td>
                         </td>
+
                         <td>
                         </td>
                         <td>
@@ -60,8 +70,6 @@
                     </tbody>
                 </form>
             </table>
-            <a class="btn-floating btn waves-effect waves-light black" ng-click="clearColumns()"><i
-                    class="mdi-content-clear">dell</i></a>
             <a class="btn-floating btn waves-effect waves-light black" ng-click="addColumn()"><i class="material-icons">add</i></a>
 
             </br>
@@ -69,7 +77,6 @@
             <hr>
             <div align="right">
                 <a class="waves-effect waves-light black btn" ng-click="returnToListTables()">Return</a>
-                <a class="waves-effect waves-light black btn" ng-click="saveTable()">Save</a>
             </div>
         </div>
     </div>

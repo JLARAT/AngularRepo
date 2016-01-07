@@ -8745,13 +8745,14 @@ form p:last-child {
     height: 22px;
     border-top: 2px solid transparent;
     border-left: 2px solid transparent;
-    border-right: 2px solid #26a69a;
-    border-bottom: 2px solid #26a69a;
+    border-right: 2px solid #000000;
+    border-bottom: 2px solid #000000;
     -webkit-transform: rotate(40deg);
     -moz-transform: rotate(40deg);
     -ms-transform: rotate(40deg);
     -o-transform: rotate(40deg);
     transform: rotate(40deg);
+
     -webkit-backface-visibility: hidden;
     -webkit-transform-origin: 100% 100%;
     -moz-transform-origin: 100% 100%;

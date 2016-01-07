@@ -13,8 +13,10 @@ app.factory('localStorageDataProvider', function () {
             for(var i=0; i<localStorage.length;  i++) {
                 var name = localStorage.key(i);
                 var columns = localStorage[name];
+                var pkIsDefined = localStorage[pkIsDefined];
                 lsTable.name = name;
                 lsTable.colums = columns;
+                lsTable.pkIsDefined =
                 lsTables.push(lsTable);
             }
 
