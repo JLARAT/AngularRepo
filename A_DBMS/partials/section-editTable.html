@@ -16,7 +16,7 @@
                     <tbody>
                     <tr ng-repeat="c in columns">
                         <td>
-                            <a ng-click="delColumn(c)" style="cursor: pointer;">X</a>
+                            <div><a ng-click="delColumn(c)" style="cursor: pointer;">X</a></div>
                         </td>
                         <td>
                             <input id="{{c.idC}}" type="checkbox" ng-model="c.pk" ng-click="checkPk(c.idC)" watch/>
@@ -31,24 +31,22 @@
                         </td>
                         <td>
                             <div>
-                                <select class="browser-default" ng-model="c.type" material-select watch>
-                                    <option ng-repeat="t in types">{{t.type}}</option>
+                                <select class="browser-default" ng-model="c.type" ng-change="keypressHandler($event)" material-select watch>
+                                    <option ng-repeat="t in types" >{{t.type}}</option>
                                 </select>
                             </div>
                         </td>
                         <td>
                             <div>
-                                <select class="browser-default" material-select watch>
-                                    <option ng-repeat="c in tablePK">{{c.title}}</option>
+                                <select class="browser-default" ng-model="c.fk" material-select watch>
+                                    <option ng-repeat="pk in tablePK">{{pk.PKtable}} : {{pk.PKcolumn}}</option>
                                 </select>
                             </div>
                         </td>
                     </tr>
-
                     <tr>
                         <td>
                         </td>
-
                         <td>
                         </td>
                         <td>
@@ -70,14 +68,21 @@
                     </tbody>
                 </form>
             </table>
-            <a class="btn-floating btn waves-effect waves-light black" ng-click="addColumn()"><i class="material-icons">add</i></a>
-
             </br>
-            </br>
-            <hr>
             <div align="right">
-                <a class="waves-effect waves-light black btn" ng-click="returnToListTables()">Return</a>
+            <a class="waves-effect waves-light black btn" ng-click="addColumn()" style="width: 100px;">Add</a>
             </div>
+            <br>
+            <hr>
+            <div style="float: left;">
+                <a class="waves-effect waves-light black btn" ng-click="returnToListTables()">New Table</a>
+            </div>
+            <div style="float: right;">
+                <a class="waves-effect waves-light black btn" ng-click="previousTable(tableName)">Previous</a>
+                <a class="waves-effect waves-light black btn" ng-click="nextTable(tableName)" style="width: 100px;">Next</a>
+            </div>
+            <br>
+            <br>
         </div>
     </div>
 

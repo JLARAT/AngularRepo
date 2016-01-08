@@ -24,7 +24,7 @@
         </ul>
         <a href="#/index" class="brand-logo center black" id="abdmsTitle">Angular DBMS</a>
         <ul id="nav-mobileRight" class="right hide-on-med-and-down">
-            <li><a href="#/table" class="waves-effect waves-light btn modal-trigger white black-text">Settings</a>
+            <li><a href="#/table" class="waves-effect waves-light btn modal-trigger white black-text" ng-click="clearAllData()">Init</a>
             </li>
         </ul>
     </div>
@@ -36,8 +36,8 @@
 <section-bdd></section-bdd>
 
 <!--Tables-->
-<section-list-tables></section-list-tables>
 
+<section-list-tables style="z-index: 100"></section-list-tables>
 <div ng-view></div>
 
 <!--Script-->

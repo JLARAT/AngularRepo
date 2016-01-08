@@ -11,12 +11,12 @@ app.controller('mainController', function ($scope, $location, localStorageDataPr
         pkIsDefined: false
     };
     $scope.columns = [];
-
     $scope.column = {
         idC: 0,
         title: "",
         type: "",
-        pk: false
+        pk: false,
+        fk: {}
     };
 
     $scope.types = [
@@ -46,21 +46,22 @@ app.controller('mainController', function ($scope, $location, localStorageDataPr
     //localStorageDataProvider.getLocalStorageTables();
 
     $scope.clearAllData = function () {
+        Materialize.toast("Clearing data...", 2000);
         localStorage.clear();
+        $scope.tablePK = [];
+        $scope.tables = [];
         $location.path('/table');
     }
 });
 
 //Parallax controller
 app.controller('sectionParallaxController', function ($scope, $location) {
-
     $scope.Launcher = function () {
         Materialize.toast("Enjoy !", 2000);
         $("#ParallaxContainer").addClass('animated bounceOut').delay(2000).queue(function (next) {
             next();
         });
         $location.path('/bdd');
-
     };
 });
 
@@ -112,6 +113,10 @@ app.controller('sectionListTables', function ($scope, $location, localStorageDat
     };
 
     $scope.editTable = function (table) {
+        $scope.tablePK = $scope.tablePK.filter(function(el){
+            return el.PKtable != table.title;
+        });
+
         $("#ContainerTableSelect").addClass('animated fadeOutLeft').delay(2000).queue(function (next) {
             next();
         });
@@ -122,6 +127,7 @@ app.controller('sectionListTables', function ($scope, $location, localStorageDat
         if (confirm("Sure to delete all tables ?")) {
             localStorageDataProvider.removeAllTables();
             $scope.tables = [];
+            $scope.tablePK = [];
             $location.path('/table');
         }
 
@@ -135,10 +141,9 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
 
     //récupération du nom de la table passée en url
     $scope.tableName = $routeParams.nomTable;
-
     tableRecup = localStorageDataProvider.getTable($scope.tableName);
 
-    //récupération des tables existantes
+    //Recup Data
     if (tableRecup.name === undefined) {
         $scope.columns = [];
         $scope.column = {};
@@ -146,27 +151,25 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
     else {
         $scope.table = tableRecup;
         $scope.columns = $scope.table.columns;
-
     }
 
+    function saveColumn(){
+        Materialize.toast("Saving Table...", 2000);
 
-    for (t in $scope.tables) {
-        for (c in t.columns) {
-            if (c.pk){
-                $scope.tablePK.push(c);
-            }
-        }
-    }
+        $scope.table.name = $scope.tableName;
+        $scope.table.columns = $scope.columns;
 
+        localStorage.setItem($scope.tableName, JSON.stringify($scope.table));
+
+        $scope.table = {};
+    };
 
     $scope.addColumn = function () {
         if (!$scope.column.title) {
-            // avoid void name column
             Materialize.toast("Column Name is void !", 2000);
             return;
         }
         else if (!$scope.column.type) {
-            // avoid void type column
             Materialize.toast("Column type is void !", 2000);
             return;
         }
@@ -193,33 +196,71 @@ app.controller('sectionEditTablesController', function ($scope, $location, $rout
 
     $scope.checkPk = function (col) {
 
-        //permet d'identifier la pk, si c'est la même que la colonne selectionnée
-        $scope.table.pkIsDefined = $scope.columns[col].pk;
-
-        //reproduit le comportement d'un radio
-        for (var c in $scope.columns) {
-            if ($scope.columns[c].idC != col) {
-                $scope.columns[c].pk = false;
-            }
+        if ( $scope.columns[col].pk) {
+            $scope.tablePK.push({
+                PKtable: $scope.tableName,
+                PKcolumn: $scope.columns[col].title
+            });
+        }
+        else {
+            for (var i =0; i < $scope.tablePK.length; i++)
+                if ($scope.tablePK[i].PKcolumn === $scope.columns[col].title) {
+                    $scope.tablePK.splice(i,1);
+                    break;
+                }
         }
     };
 
-    //save and return
     $scope.returnToListTables = function () {
-        if (!$scope.table.pkIsDefined) {
-            Materialize.toast("Primary key is not defined", 2000);
-            return;
-        }
-        Materialize.toast("Saving Table...", 2000);
-
-        $scope.table.name = $scope.tableName;
-        $scope.table.columns = $scope.columns;
-
-        localStorage.setItem($scope.tableName, JSON.stringify($scope.table));
-
-
-        $scope.table = {};
         $location.path('/table');
+    };
+
+    $scope.nextTable = function(currentTable){
+        saveColumn();
+
+        var nameTab = "";
+        for (var i =0; i < $scope.tables.length; i++) {
+            if ($scope.tables[i].title === currentTable) {
+                //Next table to edit -> indice i+1
+                if(i == $scope.tables.length - 1){
+                    nameTab = $scope.tables[0].title;
+                }
+                else {
+                    nameTab = $scope.tables[i + 1].title;
+                }
+                break;
+            }
+        }
+
+
+
+        $("#ContainerTableSelect").addClass('animated fadeOutLeft').delay(2000).queue(function (next) {
+            next();
+        });
+        $location.path('/edit/' + nameTab);
+    };
+
+    $scope.previousTable = function(currentTable){
+        saveColumn();
+
+        var nameTab = "";
+        for (var i =0; i < $scope.tables.length; i++) {
+            if ($scope.tables[i].title === currentTable) {
+                if(i == 0){
+                    nameTab = $scope.tables[$scope.tables.length - 1].title;
+                }
+                else {
+                    nameTab = $scope.tables[i - 1].title;
+                }
+                break;
+            }
+        }
+
+
+        $("#ContainerTableSelect").addClass('animated fadeOutLeft').delay(2000).queue(function (next) {
+            next();
+        });
+        $location.path('/edit/' + nameTab);
     };
 
 

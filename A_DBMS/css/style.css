@@ -23,28 +23,7 @@ label{
 .col.s12.m6{
     float: none;
     margin: 100px auto;
-    width: 600px;
+    width: 700px;
     height: 300px;
 }
 
-
-
-.checkPrimaryKey {
-    display:none;
-}
-
-.checkPrimaryKey + label{
-    background:url('ressources/check-box.png') no-repeat;
-    height: 16px;
-    width: 16px;
-    display:inline-block;
-    padding: 0 0 0 0px;
-}
-
-.checkPrimaryKey:checked + label{
-    background:url('ressources/check-box-checked.png') no-repeat;
-    height: 16px;
-    width: 16px;
-    display:inline-block;
-    padding: 0 0 0 0px;
-}
